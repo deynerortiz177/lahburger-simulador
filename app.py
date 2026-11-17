@@ -341,14 +341,14 @@ with tabs[2]:
 
     out = io.BytesIO()
     with pd.ExcelWriter(out, engine="openpyxl") as w:
-        pr1.to_excel(w, "Proyeccion_con_prestamo", index=False)
-        res0.proyeccion().to_excel(w, "Proyeccion_sin_prestamo", index=False)
+        pr1.to_excel(w, sheet_name="Proyeccion_con_prestamo", index=False)
+        res0.proyeccion().to_excel(w, sheet_name="Proyeccion_sin_prestamo", index=False)
         if monto > 0:
-            tabla_amortizacion(monto, CR.tasa_mensual, CR.plazo, CR.gracia, CR.seguro_mensual).to_excel(w, "Amortizacion", index=False)
-        cp.to_excel(w, "Comparar_plazos", index=False); cd.to_excel(w, "Comparar_destinos", index=False)
+            tabla_amortizacion(monto, CR.tasa_mensual, CR.plazo, CR.gracia, CR.seguro_mensual).to_excel(w, sheet_name="Amortizacion", index=False)
+        cp.to_excel(w, sheet_name="Comparar_plazos", index=False); cd.to_excel(w, sheet_name="Comparar_destinos", index=False)
         pd.DataFrame([{"Parametro": k_, "Valor": v_} for k_, v_ in {**asdict(S), **{f"destino_{a}": b for a, b in asdict(D).items()},
                                                                    **{f"credito_{a}": b for a, b in asdict(CR).items()},
-                                                                   "monto_maximo": MM["monto_max"]}.items()]).to_excel(w, "Supuestos", index=False)
+                                                                   "monto_maximo": MM["monto_max"]}.items()]).to_excel(w, sheet_name="Supuestos", index=False)
     st.download_button("⬇️ Descargar resultados (Excel)", out.getvalue(), "resultados_prestamo_LaHBurger.xlsx")
 
 # ================================================================= 4. REQUISITOS

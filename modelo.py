@@ -118,8 +118,7 @@ def cargar_excel(archivo) -> tuple[dict, list[str]]:
     v["Cantidad"] = _num(v["Cantidad"])
     v["Precio_unitario"] = _num(v["Precio_unitario"])
     v = v.dropna(subset=["Fecha", "Producto", "Cantidad"])
-    sin = v["Precio_unitario"].isna()
-    v.loc[sin, "Precio_unitario"] = v.loc[sin, "Producto"].map(precios)
+    v["Precio_unitario"] = v["Precio_unitario"].astype(float).fillna(v["Producto"].map(precios).astype(float))
     if v["Precio_unitario"].isna().any():
         avisos.append(f"{int(v['Precio_unitario'].isna().sum())} fila(s) de Ventas sin precio: se omitieron.")
         v = v.dropna(subset=["Precio_unitario"])
